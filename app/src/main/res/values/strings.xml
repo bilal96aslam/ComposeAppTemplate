@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">ComposeAppTemplate</string>
+    <string name="response_error" translatable="false">Something went wrong please try again!</string>
+    <string name="internet_error" translatable="false">Internet is not available!</string>
+    <string name="login" translatable="false">Login</string>
+    <string name="enter_password" translatable="false">Enter password</string>
+    <string name="enter_email" translatable="false">Enter email</string>
 </resources>

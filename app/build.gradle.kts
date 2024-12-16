@@ -74,10 +74,14 @@ dependencies {
     implementation(libs.ktor.client.okhttp)
     implementation(libs.ktor.serialization.kotlinx.json)
     implementation(libs.ktor.client.logging)
+    implementation(libs.ktor.client.android)
 
     // timber
     implementation(libs.timber)
 
     // security
     implementation(libs.androidx.security.crypto)
+
+    // gson
+    implementation(libs.gson)
 }
