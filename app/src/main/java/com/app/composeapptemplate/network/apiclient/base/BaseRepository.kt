@@ -1,18 +1,21 @@
 package com.app.composeapptemplate.network.apiclient.base
 
 import com.app.composeapptemplate.R
-import com.app.composeapptemplate.data.ResourceProvider
+import com.app.composeapptemplate.utils.ResourceProvider
+import com.app.composeapptemplate.utils.NetworkUtils
 import com.google.gson.Gson
-import kotlinx.serialization.json.JsonObject
-import okhttp3.Response
+import com.google.gson.JsonObject
+import io.ktor.client.call.body
+import io.ktor.client.statement.HttpResponse
+import io.ktor.http.isSuccess
 import timber.log.Timber
 
-open class BaseRepository(private val resourceProvider: ResourceProvider) {
+open class BaseRepository(val resourceProvider: ResourceProvider) {
 
-    /**
+    /*
      * Safely executes an API call and handles exceptions.
      */
-    suspend fun <T : Any> safeApiCall(apiCall: suspend () -> Response<T>): ApiResponse<T> {
+    suspend inline fun <reified T : Any> safeApiCall(apiCall: () -> HttpResponse): ApiResponse<T> {
         return try {
             if (!isNetworkAvailable()) {
                 ApiError(
@@ -35,22 +38,23 @@ open class BaseRepository(private val resourceProvider: ResourceProvider) {
     /**
      * Checks for network availability.
      */
-    private fun isNetworkAvailable(): Boolean {
+    fun isNetworkAvailable(): Boolean {
         return NetworkUtils.isNetworkConnected(resourceProvider.getContext())
     }
 
     /**
      * Processes the API response.
      */
-    private fun <T : Any> handleApiResponse(response: Response<T>): ApiResponse<T> {
-        return if (response.isSuccessful) {
-            val body = response.body()
-            if (body != null) {
-                ApiResponse.Success(data = body, code = response.code())
-            } else {
+    suspend inline fun <reified T : Any> handleApiResponse(response: HttpResponse): ApiResponse<T> {
+        return if (response.status.isSuccess()) {
+            try {
+                val body: T = response.body()
+                ApiResponse.Success(data = body, code = response.status.value)
+            } catch (e: Exception) {
+                Timber.e(e, "Error parsing response body: ${e.localizedMessage}")
                 ApiResponse.Error(
                     ApiError(
-                        code = response.code(),
+                        code = response.status.value,
                         message = resourceProvider.getString(R.string.response_error)
                     )
                 )
@@ -58,7 +62,7 @@ open class BaseRepository(private val resourceProvider: ResourceProvider) {
         } else {
             val errorMessage = parseError(response)
             ApiResponse.Error(
-                ApiError(code = response.code(), message = errorMessage)
+                ApiError(code = response.status.value, message = errorMessage)
             )
         }
     }
@@ -66,13 +70,11 @@ open class BaseRepository(private val resourceProvider: ResourceProvider) {
     /**
      * Parses error messages from the response.
      */
-    private fun parseError(response: Response<*>): String {
+    suspend fun parseError(response: HttpResponse): String {
         return try {
-            // Parse the error body as a JSON string
-            val errorBody = response.errorBody()?.string()
-
-            // If the error body is not null, parse it
-            if (!errorBody.isNullOrEmpty()) {
+            val errorBody = response.body<String>()
+            if (errorBody.isNotEmpty()) {
+                // Parse the error body as a JSON string
                 val jsonObject = Gson().fromJson(errorBody, JsonObject::class.java)
                 // Get the "error" field from the response and return its value
                 jsonObject.get("error")?.asString
@@ -81,8 +83,7 @@ open class BaseRepository(private val resourceProvider: ResourceProvider) {
                 resourceProvider.getString(R.string.response_error)
             }
         } catch (e: Exception) {
-            // Log any exceptions and return the default error message
-            Timber.e(e, "Error parsing response body: ${e.localizedMessage}")
+            Timber.e(e, "Error parsing error body: ${e.localizedMessage}")
             resourceProvider.getString(R.string.response_error)
         }
     }

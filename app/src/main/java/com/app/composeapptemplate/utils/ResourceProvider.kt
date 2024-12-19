@@ -1,4 +1,4 @@
-package com.app.composeapptemplate.data
+package com.app.composeapptemplate.utils
 
 import android.content.Context
 import android.graphics.drawable.Drawable

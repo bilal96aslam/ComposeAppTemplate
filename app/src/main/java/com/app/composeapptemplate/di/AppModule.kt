@@ -2,7 +2,7 @@ package com.app.composeapptemplate.di
 
 import android.content.Context
 import com.app.composeapptemplate.data.PreferencesHelperImpl
-import com.app.composeapptemplate.data.ResourceProvider
+import com.app.composeapptemplate.utils.ResourceProvider
 import com.app.composeapptemplate.network.apiclient.KtorHttpClient
 import com.app.composeapptemplate.utils.Constant.PREF_FILE_NAME
 import dagger.Module
