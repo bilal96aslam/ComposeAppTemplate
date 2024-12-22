@@ -1,5 +1,6 @@
 package com.app.composeapptemplate.network.apiclient
 
+import com.app.composeapptemplate.network.request.LoginRequest
 import com.app.composeapptemplate.utils.Constant.BASE_URL
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
@@ -11,6 +12,8 @@ import io.ktor.client.request.post
 import io.ktor.client.request.put
 import io.ktor.client.request.setBody
 import io.ktor.client.statement.HttpResponse
+import io.ktor.http.ContentType
+import io.ktor.http.contentType
 import javax.inject.Inject
 
 abstract class BaseApiService(
@@ -56,11 +59,7 @@ abstract class BaseApiService(
 class ApiInterface @Inject constructor(client: HttpClient) : BaseApiService(client, BASE_URL) {
     suspend fun login(email: String, password: String): HttpResponse =
         post(endpoint = "login") {
-            setBody(
-                mapOf(
-                    "email" to email,
-                    "password" to password
-                )
-            )
+            contentType(ContentType.Application.Json)
+            setBody(LoginRequest(email, password))
         }
 }

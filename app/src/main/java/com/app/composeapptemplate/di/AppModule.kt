@@ -32,5 +32,4 @@ class AppModule {
     @Provides
     fun getHttpClient(client: KtorHttpClient): HttpClient = client.getHttpClient()
 
-
 }

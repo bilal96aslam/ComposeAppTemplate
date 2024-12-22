@@ -12,9 +12,9 @@ import io.ktor.http.ContentType
 import io.ktor.http.HttpHeaders
 import io.ktor.http.headers
 import io.ktor.serialization.kotlinx.json.json
-import javax.inject.Inject
 import kotlinx.serialization.json.Json
 import timber.log.Timber
+import javax.inject.Inject
 
 class KtorHttpClient @Inject constructor() {
 

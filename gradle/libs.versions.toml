@@ -11,7 +11,7 @@ composeBom = "2024.04.01"
 hilt = "2.48"
 hilt-navigation-compose = "1.1.0"
 ksp = "2.0.0-1.0.24"
-navigation-compose = "2.7.6"
+navigation-compose = "2.8.5"
 timber = "5.0.1"
 ktor = "2.3.5"
 securityCrypto = "1.1.0-alpha06"
@@ -46,6 +46,7 @@ ktor-client-android = { module = "io.ktor:ktor-client-android", version.ref = "k
 timber = { module = "com.jakewharton.timber:timber", version.ref = "timber" }
 androidx-security-crypto = { group = "androidx.security", name = "security-crypto", version.ref = "securityCrypto" }
 gson = { module = "com.google.code.gson:gson", version.ref = "gson" }
+navigation-compose = { group = "androidx.navigation", name = "navigation-compose", version.ref = "navigation-compose" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
@@ -53,4 +54,5 @@ kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 hiltAndroid = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
+kotlinxSerialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 
