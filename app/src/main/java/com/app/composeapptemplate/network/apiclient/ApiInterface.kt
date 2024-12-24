@@ -62,4 +62,9 @@ class ApiInterface @Inject constructor(client: HttpClient) : BaseApiService(clie
             contentType(ContentType.Application.Json)
             setBody(LoginRequest(email, password))
         }
+
+    suspend fun getUser(userId: String): HttpResponse =
+        get(endpoint = "users/$userId") {
+            contentType(ContentType.Application.Json)
+        }
 }

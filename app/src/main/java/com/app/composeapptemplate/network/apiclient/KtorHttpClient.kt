@@ -42,14 +42,14 @@ class KtorHttpClient @Inject constructor() {
             }
         }
 
-        install(DefaultRequest) {
-            /** you can also define other parameters in this like
+        /*install(DefaultRequest) {
+            *//** you can also define other parameters in this like
              * parameter("api_key", "api_value")
-            **/
+            **//*
             headers {
                 append(HttpHeaders.ContentType, ContentType.Application.Json.toString())
             }
-        }
+        }*/
 
         engine {
             connectTimeout = TIMEOUT
