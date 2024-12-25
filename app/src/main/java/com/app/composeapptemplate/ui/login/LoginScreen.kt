@@ -27,11 +27,12 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavHostController
 import com.app.composeapptemplate.R
 import com.app.composeapptemplate.navigation.TopLevelDestination
+import com.app.composeapptemplate.ui.components.AppToolBar
 import com.app.composeapptemplate.ui.components.Loader
 import com.app.composeapptemplate.ui.components.VerticalSpacer
-import com.app.composeapptemplate.utils.extension.showToast
 import timber.log.Timber
 
 @Composable
@@ -39,25 +40,21 @@ fun LoginScreen(
     modifier: Modifier,
     loginVM: LoginVM,
     loginScreenUiState: LoginScreenUiState,
-    onNavigateClick: (source: String) -> Unit
+    onNavigateClick: (source: String) -> Unit,
+    navController: NavHostController
 ) {
     val email by remember { loginVM.email }
     val password by remember { loginVM.password }
     var passwordVisible by rememberSaveable { mutableStateOf(false) }
 
-    LaunchedEffect(loginScreenUiState) {
-        when (loginScreenUiState) {
-            is LoginScreenUiState.Error -> onNavigateClick(TopLevelDestination.Home.title)
-            //showToast(loginScreenUiState.msg)
-            is LoginScreenUiState.Initial -> Unit
-            is LoginScreenUiState.Success -> {
-                onNavigateClick(TopLevelDestination.Home.title)
-            }
-            else -> Unit
-        }
-    }
-
-    Box(modifier = Modifier.fillMaxSize()) {
+    AppToolBar(
+        navController = navController,
+        title = stringResource(R.string.login)
+    )
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+    ) {
         Column(
             modifier = modifier.align(Alignment.Center),
             verticalArrangement = Arrangement.Center,
@@ -103,10 +100,18 @@ fun LoginScreen(
             }) {
                 Text(text = stringResource(id = R.string.login))
             }
-            if (loginScreenUiState is LoginScreenUiState.Loading) {
-                Loader(modifier = Modifier.fillMaxSize())
-            }
         }
+        when (loginScreenUiState) {
+            is LoginScreenUiState.Error -> onNavigateClick(TopLevelDestination.Home.title)
+            //showToast(loginScreenUiState.msg)
+            is LoginScreenUiState.Initial -> Unit
+            is LoginScreenUiState.Success -> {
+                LaunchedEffect(Unit) {
+                    onNavigateClick(TopLevelDestination.Home.title)
+                }
+            }
 
+            is LoginScreenUiState.Loading -> Loader(modifier = Modifier.fillMaxSize())
+        }
     }
 }

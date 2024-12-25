@@ -16,10 +16,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
+import com.app.composeapptemplate.R
 import com.app.composeapptemplate.network.response.UserData
+import com.app.composeapptemplate.ui.components.AppToolBar
 import com.app.composeapptemplate.ui.components.ErrorState
 import com.app.composeapptemplate.ui.components.Loader
 import com.app.composeapptemplate.ui.components.VerticalSpacer
@@ -30,7 +34,13 @@ fun HomeScreen(
     modifier: Modifier,
     homeScreenUiState: HomeScreenUiState,
     loadData: () -> Unit,
+    navController: NavHostController
 ) {
+    AppToolBar(
+        navController = navController,
+        title = stringResource(R.string.home),
+        isBackButtonVisible = true
+    )
 
     LaunchedEffect(Unit) {
         loadData()
@@ -40,7 +50,7 @@ fun HomeScreen(
         is HomeScreenUiState.Error -> {
             showToast(homeScreenUiState.msg)
             ErrorState(
-                message = "Something went wrong please try again!",
+                message = stringResource(R.string.response_error),
                 modifier = Modifier.fillMaxSize()
             )
         }

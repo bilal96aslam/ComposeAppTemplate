@@ -33,11 +33,13 @@ fun AppNavigation(
                 loginVM = loginVM,
                 loginScreenUiState = loginUiState,
                 onNavigateClick = { source ->
-                    navController.navigate(source) {
-                        launchSingleTop = true
+                    if (navController.currentBackStackEntry?.destination?.route != source) {
+                        navController.navigate(source) {
+                            launchSingleTop = true
+                        }
                     }
-                }
-
+                },
+                navController = navController
             )
         }
         composable(route = TopLevelDestination.Home.route) {
@@ -46,7 +48,8 @@ fun AppNavigation(
             HomeScreen(
                 modifier = modifier,
                 loadData = { homeVM.getUserData() },
-                homeScreenUiState = homeScreenUiState
+                homeScreenUiState = homeScreenUiState,
+                navController = navController
             )
         }
     }
