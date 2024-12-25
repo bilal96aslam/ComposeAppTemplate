@@ -33,7 +33,7 @@ import com.app.composeapptemplate.navigation.TopLevelDestination
 import com.app.composeapptemplate.ui.components.AppToolBar
 import com.app.composeapptemplate.ui.components.Loader
 import com.app.composeapptemplate.ui.components.VerticalSpacer
-import timber.log.Timber
+import com.app.composeapptemplate.utils.extension.showToast
 
 @Composable
 fun LoginScreen(
@@ -86,27 +86,26 @@ fun LoginScreen(
                         Icon(
                             painter = painterResource(image),
                             "",
-                            modifier = Modifier.size(
-                                22.dp
-                            )
+                            modifier = Modifier.size(22.dp)
                         )
                     }
                 }
             )
             VerticalSpacer(15)
             Button(onClick = {
-                Timber.e("callho")
                 loginVM.login()
             }) {
                 Text(text = stringResource(id = R.string.login))
             }
         }
         when (loginScreenUiState) {
-            is LoginScreenUiState.Error -> onNavigateClick(TopLevelDestination.Home.title)
-            //showToast(loginScreenUiState.msg)
+            is LoginScreenUiState.Error -> showToast(loginScreenUiState.msg)
+
             is LoginScreenUiState.Initial -> Unit
             is LoginScreenUiState.Success -> {
+                // to prevent navigation again on recomposition
                 LaunchedEffect(Unit) {
+                    loginVM.resetUiState()
                     onNavigateClick(TopLevelDestination.Home.title)
                 }
             }

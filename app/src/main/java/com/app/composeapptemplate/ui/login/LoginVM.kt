@@ -2,16 +2,16 @@ package com.app.composeapptemplate.ui.login
 
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
-import com.app.composeapptemplate.repository.AppRepo
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
 import androidx.lifecycle.viewModelScope
 import com.app.composeapptemplate.network.apiclient.base.ApiResponse
+import com.app.composeapptemplate.repository.AppRepo
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @HiltViewModel
@@ -31,6 +31,10 @@ class LoginVM @Inject constructor(private val app: AppRepo) : ViewModel() {
 
     fun onPasswordChange(userPassword: String){
         password.value = userPassword
+    }
+
+    fun resetUiState() {
+        _loginResponse.value = LoginScreenUiState.Initial
     }
 
     fun login() {

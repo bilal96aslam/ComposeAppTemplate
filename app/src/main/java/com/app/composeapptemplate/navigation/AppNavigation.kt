@@ -33,11 +33,7 @@ fun AppNavigation(
                 loginVM = loginVM,
                 loginScreenUiState = loginUiState,
                 onNavigateClick = { source ->
-                    if (navController.currentBackStackEntry?.destination?.route != source) {
-                        navController.navigate(source) {
-                            launchSingleTop = true
-                        }
-                    }
+                    navController.navigate(source)
                 },
                 navController = navController
             )
